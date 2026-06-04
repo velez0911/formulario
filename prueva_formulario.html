@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Sistema de Gestión Hospitalaria - Centro Médico</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            /* Colores Fríos e Institucionales */
+            --primary-dark: #1e293b;
+            --primary-light: #334155;
+            --accent-blue: #0ea5e9;
+            --accent-hover: #0284c7;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+
+            /* Paleta Fría para Formularios */
+            --form-bg-cool: #f0f4f8;
+            --form-card-cool: #ffffff;
+            --form-input-cool: #f8fafc;
+            --form-border-cool: #cbd5e1;
+            --form-btn-cool: #0284c7;
+            --form-btn-hover-cool: #0369a1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- ENCABEZADO --- */
+        header {
+            background-color: var(--card-bg);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: -0.5px;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL (LAYOUT) --- */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* --- BARRA LATERAL DE NAVEGACIÓN --- */
+        nav {
+            width: 260px;
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            shrink: 0;
+        }
+
+        nav .menu-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 10px 15px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        nav ul li button {
+            width: 100%;
+            background-color: transparent;
+            color: #cbd5e1;
+            border: none;
+            padding: 12px 15px;
+            font-size: 13.5px;
+            text-align: left;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul li button:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        nav ul li button.active {
+            background-color: var(--accent-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* --- ÁREA DE CONTENIDO --- */
+        main {
+            flex: 1;
+            padding: 30px;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* --- TARJETAS Y CONTENEDORES --- */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        /* --- LAYOUT DUAL (FORMULARIO IZQ / TABLA DER) --- */
+        .section-body {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .form-side {
+            flex: 0 0 380px;
+            width: 100%;
+        }
+
+        .table-side {
+            flex: 1;
+            display: none;
+            min-width: 0; 
+        }
+
+        /* Estilos Estructurados de Formularios Fríos */
+        .form-container-cool {
+            background-color: var(--form-bg-cool);
+            padding: 25px 20px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #d1d5db;
+        }
+        .form-title-cool {
+            color: var(--primary-dark);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .form-subtitle-cool {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .form-card-cool {
+            background-color: var(--form-card-cool);
+            border: 1px solid var(--form-border-cool);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .form-group-cool {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group-cool label {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 5px;
+        }
+        .form-group-cool input, .form-group-cool select, .form-group-cool textarea {
+            background-color: var(--form-input-cool);
+            border: 1px solid var(--form-border-cool);
+            border-radius: 6px;
+            padding: 9px;
+            font-size: 13px;
+            color: var(--text-main);
+            outline: none;
+            width: 100%;
+        }
+        .form-group-cool input:focus, .form-group-cool select:focus, .form-group-cool textarea:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        }
+        .btn-submit-cool {
+            background-color: var(--form-btn-cool);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 11px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+            transition: background 0.2s;
+        }
+        .btn-submit-cool:hover {
+            background-color: var(--form-btn-hover-cool);
+        }
+
+        /* --- BOTONES DE ACCIÓN GENERAL --- */
+        .btn-toggle {
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-toggle:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-back {
+            background-color: var(--bg-main);
+            color: var(--primary-light);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .btn-back:hover {
+            background-color: var(--border-color);
+            color: var(--primary-dark);
+        }
+
+        /* --- DASHBOARD INICIAL (BIENVENIDA) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* --- TABLAS OPTIMIZADAS --- */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13.5px;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary-light);
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* --- BADGES DE ESTADO --- */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .badge-ocupada, .badge-inactivo { background-color: #fee2e2; color: #991b1b; }
+        .badge-disponible, .badge-activo { background-color: #dcfce7; color: #166534; }
+        .badge-limpieza { background-color: #fef3c7; color: #92400e; }
+        .badge-mantenimiento { background-color: #f1f5f9; color: #475569; }
+
+        /* Vistas dinámicas */
+        .dynamic-section {
+            display: none;
+        }
+
+        /* --- PIE DE PÁGINA --- */
+        footer {
+            background-color: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        /* --- RESPONSIVO --- */
+        @media (max-width: 1100px) {
+            .section-body {
+                flex-direction: column;
+            }
+            .form-side {
+                flex: none;
+                width: 100%;
+                max-width: 450px;
+                margin: 0 auto;
+            }
+            .table-side {
+                width: 100%;
+            }
+            .dashboard-container {
+                flex-direction: column;
+            }
+            nav {
+                width: 100%;
+                padding: 10px;
+            }
+            nav ul {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            nav ul li button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            main {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-area">
+        <img src="imss-logo.png" alt="Logo Hospital" width="45" style="border-radius: 50%;">
+        <h1>HOSPITAL CENTRAL DE ESPECIALIDADES</h1>
+    </div>
+</header>
+
+<div class="dashboard-container">
+    <nav>
+        <span class="menu-title">Módulos Clínicos</span>
+        <ul>
+            <li><button onclick="navegar('seccion-medicos', this)">Médicos</button></li>
+            <li><button onclick="navegar('seccion-pacientes', this)">Pacientes</button></li>
+            <li><button onclick="navegar('seccion-historial', this)">Historial Clínico</button></li>
+        </ul>
+        <span class="menu-title" style="margin-top: 15px;">Módulos Operativos</span>
+        <ul>
+            <li><button onclick="navegar('seccion-personal', this)">Personal</button></li>
+            <li><button onclick="navegar('seccion-farmacia', this)">Farmacia</button></li>
+            <li><button onclick="navegar('seccion-citas', this)">Citas Médicas</button></li>
+            <li><button onclick="navegar('seccion-camas', this)">Control de Camas</button></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="card">
+            
+            <div id="bienvenida">
+                <div class="section-header">
+                    <h2>Panel de Control Integral</h2>
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">
+                    Bienvenido al portal de gestión operativa de nuestra institución. Este entorno unifica los flujos de trabajo clínicos y administrativos para garantizar una atención óptima, rápida y estructurada.
+                </p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number">10</div>
+                        <div class="label">Médicos Adscritos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">10</div>
+                        <div class="label">Colaboradores de Turno</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">10</div>
+                        <div class="label">Medicamentos Críticos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">60%</div>
+                        <div class="label">Ocupación de Camas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-pacientes" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Registro General de Pacientes</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-pacientes')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Alta de Pacientes</h3>
+                            <p class="form-subtitle-cool">Ingresa la información del nuevo paciente</p>
+                            <div class="form-card-cool">
+                                <form id="form-pacientes">
+                                    <div class="form-group-cool"><label>ID Paciente:</label><input type="text" id="p-id" placeholder="Ej: P11"></div>
+                                    <div class="form-group-cool"><label>ID Médico Asignado:</label><input type="text" id="p-med" placeholder="Ej: M01"></div>
+                                    <div class="form-group-cool"><label>DNI:</label><input type="text" id="p-dni" placeholder="Documento Identidad"></div>
+                                    <div class="form-group-cool"><label>Nombre Completo:</label><input type="text" id="p-nombre" placeholder="Nombre"></div>
+                                    <div class="form-group-cool"><label>F. Nacimiento:</label><input type="date" id="p-nac"></div>
+                                    <div class="form-group-cool"><label>Teléfono:</label><input type="tel" id="p-tel" placeholder="Número"></div>
+                                    <div class="form-group-cool"><label>Tipo Sangre:</label><input type="text" id="p-sangre" placeholder="Ej: O+"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="guardarPaciente()">Guardar Paciente</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-pacientes">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Pac</th><th>ID Med</th><th>DNI</th><th>Nombre Completo</th><th>F. Nacimiento</th><th>Teléfono</th><th>Tipo Sangre</th><th>Alergias</th><th>Dirección</th><th>Correo Electrónico</th><th>Género</th><th>Adeudo</th><th>Tel. Emergencia</th><th>Contacto Emergencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-pacientes">
+                                    <tr><td>P01</td><td>M01</td><td>11939301C</td><td>CARLOS RUIZ ZOTON</td><td>11/11/1989</td><td>555-9002</td><td>O+</td><td>POLEN</td><td>CALLE JUAREZ 3007</td><td>RUIZ@GMAIL.COM</td><td>M</td><td>$0</td><td>555-6030</td><td>CARLOS SOTO</td></tr>
+                                    <tr><td>P02</td><td>M02</td><td>30011901V</td><td>ANA MORALES VILA</td><td>31/11/2000</td><td>555-0398</td><td>A-</td><td>PENICILINA</td><td>C PAPALIN 7301</td><td>MORALES@GMAIL.COM</td><td>F</td><td>$1,200</td><td>555-0398</td><td>ALAN PAZ</td></tr>
+                                    <tr><td>P03</td><td>M03</td><td>190310930</td><td>LUIS HERRERA CRUZ</td><td>12/12/2001</td><td>555-4052</td><td>O+</td><td>NINGUNA</td><td>LA PAZ 3009</td><td>CRUZ@GMAIL.COM</td><td>M</td><td>$24,900</td><td>555-0309</td><td>SOFIA RIOS</td></tr>
+                                    <tr><td>P04</td><td>M04</td><td>190571085</td><td>SOFIA VEGA ORTIZ</td><td>03/09/1993</td><td>555-1068</td><td>O-</td><td>LACTOSA</td><td>PRADOS DEL SUR 3080</td><td>VEGA@GMAIL.COM</td><td>F</td><td>$0</td><td>555-6310</td><td>MARIO VEGA</td></tr>
+                                    <tr><td>P05</td><td>M05</td><td>50592879F</td><td>JAVIER MARIAS FRANCO</td><td>21/01/1966</td><td>555-0560</td><td>AB+</td><td>ASPIRINA</td><td>JUAN ESCO 9030</td><td>MARO@GMAIL.COM</td><td>M</td><td>$2,900</td><td>555-0330</td><td>MARIA FRANCO</td></tr>
+                                    <tr><td>P06</td><td>M06</td><td>46789295K</td><td>ISABEL ALLENDE LLANOS</td><td>12/11/1990</td><td>555-0950</td><td>A+</td><td>ACAROS</td><td>SAN JOSE 2828</td><td>LLANOS@GMAIL.COM</td><td>F</td><td>$0</td><td>555-7910</td><td>DANIEL RIOS</td></tr>
+                                    <tr><td>P07</td><td>M07</td><td>22365055T</td><td>JORGE CEREZO REBEZ</td><td>20/01/1975</td><td>555-7030</td><td>O-</td><td>MARISCOS</td><td>C JUAREZ 20</td><td>PEREZ@GMAIL.COM</td><td>M</td><td>$50,000</td><td>555-9010</td><td>JOSE CEREZO</td></tr>
+                                    <tr><td>P08</td><td>M08</td><td>46601896J</td><td>ELENA VALDEZ RIOS</td><td>25/11/1968</td><td>555-6080</td><td>B-</td><td>NUECES</td><td>C CENTRAL 890</td><td>RIOS@GMAIL.COM</td><td>F</td><td>$0</td><td>555-4660</td><td>LUIS VALDEZ</td></tr>
+                                    <tr><td>P09</td><td>M09</td><td>96601856X</td><td>GABRIEL GARCIA</td><td>21/06/1969</td><td>555-3060</td><td>O+</td><td>NINGUNA</td><td>C AIRES 6980</td><td>GARCIA@GMAIL.COM</td><td>M</td><td>$182,000</td><td>555-5200</td><td>SARA MUÑOZ</td></tr>
+                                    <tr><td>P10</td><td>M10</td><td>94799699P</td><td>MARIO VARGAS LLOSA</td><td>16/11/1970</td><td>555-0630</td><td>A+</td><td>SULFA</td><td>SURON 2222</td><td>LLOSA@GMAIL.COM</td><td>M</td><td>$8,830</td><td>555-4292</td><td>BEATRIZ VARGAS</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-medicos" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Control de Personal Médico Especialista</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-medicos')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Alta de Médicos</h3>
+                            <p class="form-subtitle-cool">Añadir especialista al hospital</p>
+                            <div class="form-card-cool">
+                                <form id="form-medicos">
+                                    <div class="form-group-cool"><label>ID Médico:</label><input type="text" id="m-id" placeholder="Ej: M11"></div>
+                                    <div class="form-group-cool"><label>Nombre Completo:</label><input type="text" id="m-nombre" placeholder="Nombre completo"></div>
+                                    <div class="form-group-cool"><label>Especialidad:</label><input type="text" id="m-esp" placeholder="Área médica"></div>
+                                    <div class="form-group-cool"><label>Consultorio:</label><input type="text" id="m-cons" placeholder="Ej: 104-B"></div>
+                                    <div class="form-group-cool"><label>Horario Turno:</label><input type="text" id="m-turno" placeholder="Ej: 8:00 - 14:00"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="registrarMedico()">Registrar Médico</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-medicos">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Med</th><th>Nombre Completo</th><th>Especialidad</th><th>Correo Institucional</th><th>Hospital asignado</th><th>Consultorio</th><th>Teléfono</th><th>Horario Turno</th><th>Estado</th><th>Cédula Prof.</th><th>Días Consulta</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-medicos">
+                                    <tr><td>M01</td><td>ELENA GUIZAR SOSA</td><td>CARDIOLOGIA</td><td>e.guizar@hose.com</td><td>HOSPITAL GENERAL</td><td>101-A</td><td>555-0101</td><td>8:00-14:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>CP-83422</td><td>MIE-JUE</td></tr>
+                                    <tr><td>M02</td><td>JUAN CASTRO PENA</td><td>PEDIATRA</td><td>J.PENA@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>205-B</td><td>555-0102</td><td>9:00-15:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>992011</td><td>LUN-JUE</td></tr>
+                                    <tr><td>M03</td><td>SARA MARTINEZ LUNA</td><td>NEUROLOGIA</td><td>S.MTZ@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>305-B</td><td>555-0103</td><td>14:00-20:00 PM</td><td><span class="badge badge-inactivo">INACTIVO</span></td><td>112233</td><td>LUN-VIE</td></tr>
+                                    <tr><td>M04</td><td>ROBERTOSANZ REBERTE</td><td>DERMATOLOGIA</td><td>R.SANZ@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>110</td><td>555-0104</td><td>8:00-19:00 PM</td><td><span class="badge badge-inactivo">INACTIVO</span></td><td>883922</td><td>LUN-VIE</td></tr>
+                                    <tr><td>M05</td><td>MONICA VITTI SOLER</td><td>GINECOLOGIA</td><td>M.VITTI@GOSE.COM</td><td>HOSPITAL GENERAL</td><td>909</td><td>555-0105</td><td>10:00-16:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>995567</td><td>LUN-VIE</td></tr>
+                                    <tr><td>M06</td><td>FRANCISCO ORLANDO GIL</td><td>ONCOLOGIA</td><td>F.GIL@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>501-C</td><td>555-0106</td><td>7:00-13:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>677576</td><td>LUN-JUE</td></tr>
+                                    <tr><td>M07</td><td>LUCIA MENDEZ FARO</td><td>OFTALMOLOGIA</td><td>L.FARO@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>202</td><td>555-0107</td><td>15:00-21:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>223060</td><td>MAR-SAB</td></tr>
+                                    <tr><td>M08</td><td>DIEGO TORRES ALFA</td><td>UROLOGIA</td><td>D.ALFA@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>303</td><td>555-0108</td><td>8:00-9:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>308055</td><td>LUN-VIE</td></tr>
+                                    <tr><td>M09</td><td>SAMUEL RIOS PERTO</td><td>TRAUMATOLOGIA</td><td>S.RIOS@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>108</td><td>555-0109</td><td>14:00-20:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>101090</td><td>LUN-SAB</td></tr>
+                                    <tr><td>M10</td><td>BEATRIZ GALINDO REY</td><td>PSIQUIATRIA</td><td>B.REY@HOSE.COM</td><td>HOSPITAL GENERAL</td><td>601</td><td>555-0110</td><td>11:00-17:00 PM</td><td><span class="badge badge-activo">ACTIVO</span></td><td>804163</td><td>LUN-VIE</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-personal" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Gestión de Plantilla de Personal</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-personal')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Alta de Personal</h3>
+                            <p class="form-subtitle-cool">Registrar personal operativo</p>
+                            <div class="form-card-cool">
+                                <form id="form-personal">
+                                    <div class="form-group-cool"><label>ID Personal:</label><input type="text" id="per-id" placeholder="Ej: PER 11"></div>
+                                    <div class="form-group-cool"><label>Nombre:</label><input type="text" id="per-nombre" placeholder="Nombre completo"></div>
+                                    <div class="form-group-cool"><label>Cargo:</label><input type="text" id="per-cargo" placeholder="Ej: Enfermera"></div>
+                                    <div class="form-group-cool"><label>Área:</label><input type="text" id="per-area" placeholder="Ej: Urgencias"></div>
+                                    <div class="form-group-cool"><label>Ingreso:</label><input type="date" id="per-ingreso"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="registrarPersonal()">Registrar Integrante</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-personal">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Per</th><th>DNI</th><th>Nombre</th><th>Cargo</th><th>Área</th><th>Ingreso</th><th>Contrato</th><th>Activo</th><th>Teléfono</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-personal">
+                                    <tr><td>PER 01</td><td>1234568A</td><td>MARIA PEREZ DIAZ</td><td>ENFERMERA</td><td>PLANTA Y MEDICINA INTERNA</td><td>15/03/2018</td><td>INDEFINIDO</td><td>SI</td><td>666 112 233</td></tr>
+                                    <tr><td>PER 02</td><td>876543212</td><td>JUAN LOPEZ ORTIZ</td><td>TCAE</td><td>URGENCIAS</td><td>02/11/2020</td><td>TEMPORAL</td><td>SI</td><td>666 487 561</td></tr>
+                                    <tr><td>PER 03</td><td>11223344K</td><td>ANA DIAZ GOMEZ</td><td>CELADOR</td><td>LOGÍSTICA Y TRANSPORTE</td><td>10/05/2015</td><td>INDEFINIDO</td><td>SI</td><td>677 495 522</td></tr>
+                                    <tr><td>PER 04</td><td>55667788M</td><td>PEDRO DIAZ SOLIS</td><td>ADMINISTRATIVO</td><td>GESTIÓN DE PACIENTES</td><td>20/01/2020</td><td>INTERINIDAD</td><td>SI</td><td>644 18- 048</td></tr>
+                                    <tr><td>PER 05</td><td>44887766P</td><td>LAURA VEGA DIAZ</td><td>PERSONAL DE LIMPIEZA</td><td>LIMPIEZA GENERAL</td><td>03/01/2023</td><td>TEMPORAL</td><td>SI</td><td>656 101 340</td></tr>
+                                    <tr><td>PER 06</td><td>339453662</td><td>CARLOS MORALES CASTRO</td><td>PERSONAL DE LIMPIEZA</td><td>LIMPIEZA GENERAL</td><td>12/04/2012</td><td>INDEFINIDO</td><td>SI</td><td>501 105 303</td></tr>
+                                    <tr><td>PER 07</td><td>778899002</td><td>SOFIA VEGA VARGA</td><td>PERSONAL DE LIMPIEZA</td><td>LIMPIEZA GENERAL</td><td>18/09/2021</td><td>INDEFINIDO</td><td>SI</td><td>600 123 456</td></tr>
+                                    <tr><td>PER 08</td><td>22339953B</td><td>MIGUEL ORTIZ VEGA</td><td>PERSONAL DE LIMPIEZA</td><td>LIMPIEZA GENERAL</td><td>30/07/2017</td><td>INDEFINIDO</td><td>SI</td><td>633 987 123</td></tr>
+                                    <tr><td>PER 09</td><td>667788991</td><td>ELENA CASTRO VARGAS</td><td>PERSONAL DE LIMPIEZA</td><td>LIMPIEZA GENERAL</td><td>19/02/2024</td><td>TEMPORAL</td><td>SI</td><td>663 123 321</td></tr>
+                                    <tr><td>PER 10</td><td>99556677R</td><td>DAVID CASTRO VARGAS</td><td>PERSONAL DE LIMPIEZA</td><td>LIMPIEZA GENERAL</td><td>25/08/2020</td><td>FORMACIÓN</td><td>SI</td><td>644 534 332</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-historial" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Historial Clínico de Encuentros Médicos</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-historial')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Nuevo Encuentro</h3>
+                            <p class="form-subtitle-cool">Agregar notas y diagnóstico clínico</p>
+                            <div class="form-card-cool">
+                                <form id="form-historial">
+                                    <div class="form-group-cool"><label>ID Encuentro:</label><input type="text" id="h-enc" placeholder="Ej: EI011"></div>
+                                    <div class="form-group-cool"><label>ID Paciente:</label><input type="text" id="h-pac" placeholder="Ej: P01"></div>
+                                    <div class="form-group-cool"><label>Síntomas Clínicos:</label><textarea id="h-sintomas" placeholder="Síntomas detectados"></textarea></div>
+                                    <div class="form-group-cool"><label>Diagnóstico:</label><input type="text" id="h-diag" placeholder="Código de diagnóstico"></div>
+                                    <div class="form-group-cool"><label>Tratamiento:</label><input type="text" id="h-trat" placeholder="Tratamiento prescrito"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="guardarHistorial()">Guardar Historial</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-historial">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Enc</th><th>ID Pac</th><th>ID Med</th><th>P. Arterial</th><th>Síntomas Clínicos</th><th>Cód. Diagnóstico</th><th>Tratamiento Prescrito</th><th>Notas de Seguimiento</th><th>Fecha</th><th>Frec. Cardíaca</th><th>Talla</th><th>Peso</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-historial">
+                                    <tr><td>EI001</td><td>P01</td><td>M01</td><td>103/67 MMHG</td><td>TOS SECA PERSISTENTE/FATIGA</td><td>E11.4</td><td>METFORMINA 850MGC/12H</td><td>SEGUIMIENTO EN 7 DIAS OBLIGATORIO</td><td>03/10/26</td><td>160 LPM</td><td>161.6CM</td><td>91.2 KG</td></tr>
+                                    <tr><td>EI002</td><td>P02</td><td>M02</td><td>130/48 MMHG</td><td>TOS SECA PERSISTENTE</td><td>145.909</td><td>SALBUTAMOL INHALADOR PRN</td><td>PACIECO POCO COLABORADOR</td><td>05/12/26</td><td>77 LPM</td><td>160CM</td><td>76.5 KG</td></tr>
+                                    <tr><td>EI003</td><td>P03</td><td>M03</td><td>105/88 MMHG</td><td>DOLOR DE CABEZA INTENSO</td><td>643.909</td><td>SUMATRIPA 30 MG EL INICIO</td><td>RECOMENDAR ESTUDIOS IF PERSISTE</td><td>14/10/26</td><td>64 LPM</td><td>171CM</td><td>70 KG</td></tr>
+                                    <tr><td>EI004</td><td>P04</td><td>M04</td><td>134/84 mmhg</td><td>URGENCIA MICCIONAL</td><td>N94.0</td><td>NITROFURANTOINA 100 MG</td><td>DESCARTAR ITU SI NO MEJORA</td><td>26/12/26</td><td>107 LPM</td><td>156 CM</td><td>66 KG</td></tr>
+                                    <tr><td>EI005</td><td>P05</td><td>M05</td><td>134/40 MMHG</td><td>DOLOR TORACICO OPRESIVO</td><td>120.4</td><td>NITROGLISERINA SUBLIGUAL</td><td>PACIENTE ANSIOSO</td><td>10/11/26</td><td>81 LPM</td><td>186 CM</td><td>70.4 KG</td></tr>
+                                    <tr><td>EI006</td><td>P06</td><td>M06</td><td>139/68 mmhg</td><td>DISMINUYE EL ESFUERZO/TOS</td><td>C145.1</td><td>SALBORATAMOL TIPLOTROPIC</td><td>REVISAR EFECTOS PREVIOS</td><td>13/10/26</td><td>461 LPM</td><td>173 CM</td><td>48.4 KG</td></tr>
+                                    <tr><td>EI007</td><td>P07</td><td>M07</td><td>121/64 MMHG</td><td>ARDOR AL ORINAR</td><td>CIN34.0</td><td>FOSFONICINA 99 DOSIS UNICA</td><td>RECOLECTAR CULTIVO DE ORINA</td><td>20/12/26</td><td>721 LPM</td><td>150 CM</td><td>56 KG</td></tr>
+                                    <tr><td>EI008</td><td>P08</td><td>M08</td><td>146/88 MMHG</td><td>FIEBRE ALTA, ESCALOFRIOS</td><td>CIR30.1</td><td>PARACETAMOL 1G C/8H</td><td>BUENA RESPUESTA A TRATAMIENTO</td><td>27/11/26</td><td>81 LPM</td><td>154 CM</td><td>49.5 KG</td></tr>
+                                    <tr><td>EI009</td><td>P09</td><td>M09</td><td>107/76 MMGH</td><td>FIEBRE ALTA Y ESCALOFRIOS</td><td>CI106.4</td><td>AMOXICILINA-CLORULACION</td><td>PACIENTE PROPENSO A ESTRES</td><td>18/11/26</td><td>106 LPM</td><td>171 CM</td><td>80 KG</td></tr>
+                                    <tr><td>EI010</td><td>P10</td><td>M10</td><td>112/69 MMHG</td><td>TOS SECA PERSISTENTE</td><td>CIR03.4</td><td>DEXTROMETORFANO JARABE</td><td>REVISAR PRUEBAS PREVIAS</td><td>07/11/26</td><td>108 LPM</td><td>173 CM</td><td>74 KG</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-farmacia" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Inventario Técnico de Farmacia</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-farmacia')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Alta de Medicamento</h3>
+                            <p class="form-subtitle-cool">Registrar nuevo lote médico</p>
+                            <div class="form-card-cool">
+                                <form id="form-farmacia">
+                                    <div class="form-group-cool"><label>ID Producto:</label><input type="text" id="f-id" placeholder="Ej: PR011"></div>
+                                    <div class="form-group-cool"><label>Nombre Comercial:</label><input type="text" id="f-comercial" placeholder="Nombre"></div>
+                                    <div class="form-group-cool"><label>Nombre Genérico:</label><input type="text" id="f-generico" placeholder="Sustancia"></div>
+                                    <div class="form-group-cool"><label>Stock:</label><input type="number" id="f-stock" placeholder="Cantidad disponible"></div>
+                                    <div class="form-group-cool"><label>Caducidad:</label><input type="date" id="f-caducidad"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="añadirFarmacia()">Añadir Insumo</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-farmacia">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Pro</th><th>Nombre Comercial</th><th>Nombre Genérico</th><th>Lote</th><th>Stock</th><th>Reorden</th><th>Caducidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-farmacia">
+                                    <tr><td>PR001</td><td>GLUCOPHAGE</td><td>METFORMINA</td><td>LMT45678</td><td>450</td><td>100</td><td>30/06/2027</td></tr>
+                                    <tr><td>PR002</td><td>SYMBICORT</td><td>FORMOTEROL</td><td>OUD2025A</td><td>120</td><td>30</td><td>15/04/2026</td></tr>
+                                    <tr><td>PR003</td><td>MACRODATINA</td><td>NITROFURANTOINA</td><td>NIT84012</td><td>280</td><td>80</td><td>20/12/2027</td></tr>
+                                    <tr><td>PR004</td><td>BAYER ASPIRINA</td><td>ASPIRINA</td><td>ASE34567</td><td>800</td><td>200</td><td>10/03/2027</td></tr>
+                                    <tr><td>PR005</td><td>DELTASONE</td><td>PREDNISONA</td><td>PRE67890</td><td>150</td><td>50</td><td>03/08/2027</td></tr>
+                                    <tr><td>PR006</td><td>MONUROL</td><td>FOSFONILINA</td><td>FOS12345</td><td>45</td><td>20</td><td>15/01/2027</td></tr>
+                                    <tr><td>PR007</td><td>TEMERA</td><td>PARACETAMOL</td><td>PAR78901</td><td>1200</td><td>300</td><td>22/04/2027</td></tr>
+                                    <tr><td>PR008</td><td>AUGMENTIN</td><td>AMOXICILINA</td><td>AMC23456</td><td>320</td><td>100</td><td>30/11/2027</td></tr>
+                                    <tr><td>PR009</td><td>IMITEX</td><td>SUMATCRIPTÁN</td><td>SUM56789</td><td>180</td><td>40</td><td>10/10/2026</td></tr>
+                                    <tr><td>PR010</td><td>VENTOLIN</td><td>SALBUTAMOL</td><td>SAL01234</td><td>220</td><td>60</td><td>28/02/2027</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-citas" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Control Centralizado de Citas Médicas</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-citas')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Programar Cita</h3>
+                            <p class="form-subtitle-cool">Asignar nueva fecha de consulta</p>
+                            <div class="form-card-cool">
+                                <form id="form-citas">
+                                    <div class="form-group-cool"><label>ID Cita:</label><input type="text" id="c-id" placeholder="Ej: C011"></div>
+                                    <div class="form-group-cool"><label>Paciente (ID):</label><input type="text" id="c-pac" placeholder="Ej: P01"></div>
+                                    <div class="form-group-cool"><label>Médico (ID):</label><input type="text" id="c-med" placeholder="Ej: M01"></div>
+                                    <div class="form-group-cool"><label>Motivo Clínico:</label><input type="text" id="c-motivo" placeholder="Motivo"></div>
+                                    <div class="form-group-cool"><label>Horario:</label><input type="text" id="c-horario" placeholder="Ej: 10:30 AM"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="agendarCita()">Agendar Consulta</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-citas">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Cita</th><th>Paciente</th><th>Médico</th><th>Motivo Clínico</th><th>Horario</th><th>Estado</th><th>Contacto</th><th>Consultorio</th><th>Próx. Cita</th><th>Adeudo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-citas">
+                                    <tr><td>C001</td><td>P01</td><td>M01</td><td>REVISION PRESION</td><td>9:00 AM</td><td>PROGRAMADA</td><td>555-9003</td><td>101-A</td><td>09/03/26</td><td>$0</td></tr>
+                                    <tr><td>C002</td><td>P02</td><td>M02</td><td>CONTROL MIGRAÑA</td><td>10:30 AM</td><td>PROGRAMADA</td><td>555-8360</td><td>302</td><td>15/03/26</td><td>$1,200</td></tr>
+                                    <tr><td>C003</td><td>P03</td><td>M03</td><td>TERAPIA DE RODILLA</td><td>8:00 AM</td><td>PROGRAMADA</td><td>555-3062</td><td>108</td><td>23/03/26</td><td>$50,000</td></tr>
+                                    <tr><td>C004</td><td>P04</td><td>M04</td><td>CRECIMIENTO</td><td>12:00 PM</td><td>PROGRAMADA</td><td>555-4050</td><td>203-B</td><td>10/05/26</td><td>$0</td></tr>
+                                    <tr><td>C005</td><td>P05</td><td>M05</td><td>QUIMIOTERAPIA</td><td>16:00</td><td>PROGRAMADA</td><td>555-5530</td><td>101-C</td><td>10/02/26</td><td>$2,400</td></tr>
+                                    <tr><td>C006</td><td>P06</td><td>M06</td><td>GRADUACION DE LA VISTA</td><td>11:15 AM</td><td>PROGRAMADA</td><td>555-6780</td><td>202</td><td>09/08/26</td><td>$0</td></tr>
+                                    <tr><td>C007</td><td>P07</td><td>M07</td><td>TERAPIA GRUPAL</td><td>17:45 PM</td><td>PROGRAMADA</td><td>555-8081</td><td>601</td><td>16/02/26</td><td>$200,000</td></tr>
+                                    <tr><td>C008</td><td>P08</td><td>M08</td><td>ULTRASONIDO</td><td>9:30 AM</td><td>PROGRAMADA</td><td>555-3060</td><td>110</td><td>03/03/26</td><td>$0</td></tr>
+                                    <tr><td>C009</td><td>P09</td><td>M09</td><td>CONTROL RENAL</td><td>13:00</td><td>PROGRAMADA</td><td>555-3786</td><td>303-B</td><td>20/03/26</td><td>$1,000,000</td></tr>
+                                    <tr><td>C010</td><td>P10</td><td>M10</td><td>BIOPSIA DE PIC</td><td>10:00 AM</td><td>PROGRAMADA</td><td>555-9010</td><td>909</td><td>04/09/26</td><td>$150,000</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-camas" class="dynamic-section">
+                <div class="section-header">
+                    <h2>Disponibilidad Hospitalaria de Camas</h2>
+                    <div class="header-buttons">
+                        <button class="btn-toggle" onclick="toggleDatos('tabla-camas')">👁️ Ver Datos Guardados</button>
+                        <button class="btn-back" onclick="irAlInicio()">← Volver al Inicio</button>
+                    </div>
+                </div>
+                
+                <div class="section-body">
+                    <div class="form-side">
+                        <div class="form-container-cool">
+                            <h3 class="form-title-cool">Asignar Habitación</h3>
+                            <p class="form-subtitle-cool">Asignar paciente a cama disponible</p>
+                            <div class="form-card-cool">
+                                <form id="form-camas">
+                                    <div class="form-group-cool"><label>ID Habitación:</label><input type="text" id="cam-id" placeholder="Ej: HAB101"></div>
+                                    <div class="form-group-cool">
+                                        <label>Estado Sanitario:</label>
+                                        <select id="cam-estado">
+                                            <option value="DISPONIBLE">DISPONIBLE</option>
+                                            <option value="OCUPADA">OCUPADA</option>
+                                            <option value="LIMPIEZA">LIMPIEZA</option>
+                                            <option value="MANTENIMIENTO">MANTENIMIENTO</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-cool"><label>ID Paciente Asignado:</label><input type="text" id="cam-pac" placeholder="Ej: P11"></div>
+                                    <button type="button" class="btn-submit-cool" onclick="actualizarCama()">Actualizar Cama</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-side" id="tabla-camas">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Habitación</th><th>Piso</th><th>Estado Sanitario</th><th>Tipo de Cama</th><th>ID Paciente Asignado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-camas">
+                                    <tr><td>HAB101</td><td>1</td><td><span class="badge badge-ocupada">OCUPADA</span></td><td>GENERAL</td><td>P01</td></tr>
+                                    <tr><td>HAB102</td><td>2</td><td><span class="badge badge-disponible">DISPONIBLE</span></td><td>GENERAL</td><td>P02</td></tr>
+                                    <tr><td>HAB103</td><td>3</td><td><span class="badge badge-limpieza">LIMPIEZA</span></td><td>GENERAL</td><td>P03</td></tr>
+                                    <tr><td>HAB104</td><td>4</td><td><span class="badge badge-ocupada">OCUPADA</span></td><td>GENERAL</td><td>P04</td></tr>
+                                    <tr><td>HAB105</td><td>5</td><td><span class="badge badge-disponible">DISPONIBLE</span></td><td>MATERNIDAD</td><td>P05</td></tr>
+                                    <tr><td>HAB106</td><td>6</td><td><span class="badge badge-ocupada">OCUPADA</span></td><td>GENERAL</td><td>P06</td></tr>
+                                    <tr><td>HAB107</td><td>7</td><td><span class="badge badge-ocupada">OCUPADA</span></td><td>UCI</td><td>P07</td></tr>
+                                    <tr><td>HAB108</td><td>8</td><td><span class="badge badge-mantenimiento">MANTENIMIENTO</span></td><td>UCI</td><td>P08</td></tr>
+                                    <tr><td>HAB109</td><td>9</td><td><span class="badge badge-disponible">DISPONIBLE</span></td><td>AISLAMIENTO</td><td>P09</td></tr>
+                                    <tr><td>HAB110</td><td>10</td><td><span class="badge badge-ocupada">OCUPADA</span></td><td>AISLAMIENTO</td><td>P10</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<footer>
+    <p>&copy; 2026 Hospital Central - Desarrollado por: Velez Casas Daniel Ricardo | N.CONTROL: 24308051280911</p>
+</footer>
+
+<script>
+    function navegar(idSeccion, boton) {
+        document.getElementById('bienvenida').style.display = 'none';
+        
+        let secciones = document.querySelectorAll('.dynamic-section');
+        secciones.forEach(sec => sec.style.display = 'none');
+
+        let botones = document.querySelectorAll('nav ul li button');
+        botones.forEach(btn => btn.classList.remove('active'));
+
+        let tablas = document.querySelectorAll('.table-side');
+        tablas.forEach(tab => tab.style.display = 'none');
+
+        document.getElementById(idSeccion).style.display = 'block';
+        boton.classList.add('active');
+    }
+
+    function irAlInicio() {
+        let secciones = document.querySelectorAll('.dynamic-section');
+        secciones.forEach(sec => sec.style.display = 'none');
+
+        let botones = document.querySelectorAll('nav ul li button');
+        botones.forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById('bienvenida').style.display = 'block';
+    }
+
+    function toggleDatos(idTablaSide) {
+        let tablaSide = document.getElementById(idTablaSide);
+        if (tablaSide.style.display === 'none' || tablaSide.style.display === '') {
+            tablaSide.style.display = 'block';
+        } else {
+            tablaSide.style.display = 'none';
+        }
+    }
+
+    // Formateador de Fechas (AAAA-MM-DD a DD/MM/AAAA)
+    function formatearFecha(fechaStr) {
+        if (!fechaStr) return '-';
+        const partes = fechaStr.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return fechaStr;
+    }
+
+    function mostrarTablaAuto(idTablaSide) {
+        document.getElementById(idTablaSide).style.display = 'block';
+    }
+
+    // Funciones del negocio vinculadas a los botones
+    function guardarPaciente() {
+        const id = document.getElementById('p-id').value.trim();
+        const med = document.getElementById('p-med').value.trim();
+        const dni = document.getElementById('p-dni').value.trim();
+        const nombre = document.getElementById('p-nombre').value.trim();
+        const nac = document.getElementById('p-nac').value;
+        const tel = document.getElementById('p-tel').value.trim();
+        const sangre = document.getElementById('p-sangre').value.trim();
+
+        if (!id || !med || !dni || !nombre || !nac || !tel || !sangre) {
+            alert("Por favor, llene todos los campos del Paciente.");
+            return;
+        }
+
+        const tbody = document.getElementById('tbody-pacientes');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${id.toUpperCase()}</td>
+            <td>${med.toUpperCase()}</td>
+            <td>${dni.toUpperCase()}</td>
+            <td>${nombre.toUpperCase()}</td>
+            <td>${formatearFecha(nac)}</td>
+            <td>${tel}</td>
+            <td>${sangre.toUpperCase()}</td>
+            <td>NINGUNA</td><td>-</td><td>-</td><td>-</td><td>$0</td><td>-</td><td>-</td>
+        `;
+        tbody.appendChild(tr);
+        document.getElementById('form-pacientes').reset();
+        mostrarTablaAuto('tabla-pacientes');
+    }
+
+    function registrarMedico() {
+        const id = document.getElementById('m-id').value.trim();
+        const nombre = document.getElementById('m-nombre').value.trim();
+        const esp = document.getElementById('m-esp').value.trim();
+        const cons = document.getElementById('m-cons').value.trim();
+        const turno = document.getElementById('m-turno').value.trim();
+
+        if (!id || !nombre || !esp || !cons || !turno) {
+            alert("Por favor, llene todos los campos del Médico.");
+            return;
+        }
+
+        const tbody = document.getElementById('tbody-medicos');
+        const tr = document.createElement('tr');
+        const correoSugerido = nombre.toLowerCase().replace(/[^a-z0-9]/g, "") + "@hose.com";
+        const cedulaAleatoria = "CP-" + Math.floor(10000 + Math.random() * 90000);
+
+        tr.innerHTML = `
+            <td>${id.toUpperCase()}</td>
+            <td>${nombre.toUpperCase()}</td>
+            <td>${esp.toUpperCase()}</td>
+            <td>${correoSugerido}</td>
+            <td>HOSPITAL GENERAL</td>
+            <td>${cons.toUpperCase()}</td>
+            <td>555-0100</td>
+            <td>${turno.toUpperCase()}</td>
+            <td><span class="badge badge-activo">ACTIVO</span></td>
+            <td>${cedulaAleatoria}</td>
+            <td>LUN-VIE</td>
+        `;
+        tbody.appendChild(tr);
+        document.getElementById('form-medicos').reset();
+        mostrarTablaAuto('tabla-medicos');
+    }
+
+    function registrarPersonal() {
+        const id = document.getElementById('per-id').value.trim();
+        const nombre = document.getElementById('per-nombre').value.trim();
+        const cargo = document.getElementById('per-cargo').value.trim();
+        const area = document.getElementById('per-area').value.trim();
+        const ingreso = document.getElementById('per-ingreso').value;
+
+        if (!id || !nombre || !cargo || !area || !ingreso) {
+            alert("Por favor, llene todos los campos de la Plantilla.");
+            return;
+        }
+
+        const tbody = document.getElementById('tbody-personal');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${id.toUpperCase()}</td>
+            <td>-</td>
+            <td>${nombre.toUpperCase()}</td>
+            <td>${cargo.toUpperCase()}</td>
+            <td>${area.toUpperCase()}</td>
+            <td>${formatearFecha(ingreso)}</td>
+            <td>TEMPORAL</td>
+            <td>SI</td>
+            <td>-</td>
+        `;
+        tbody.appendChild(tr);
+        document.getElementById('form-personal').reset();
+        mostrarTablaAuto('tabla-personal');
+    }
+
+    function guardarHistorial() {
+        const enc = document.getElementById('h-enc').value.trim();
+        const pac = document.getElementById('h-pac').value.trim();
+        const sintomas = document.getElementById('h-sintomas').value.trim();
+        const diag = document.getElementById('h-diag').value.trim();
+        const trat = document.getElementById('h-trat').value.trim();
+
+        if (!enc || !pac || !sintomas || !diag || !trat) {
+            alert("Por favor, llene todos los campos del Encuentro Clínico.");
+            return;
+        }
+
+        const hoy = new Date();
+        const fechaFormatoCorto = `${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() + 1).padStart(2, '0')}/${String(hoy.getFullYear()).substring(2)}`;
+
+        const tbody = document.getElementById('tbody-historial');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${enc.toUpperCase()}</td>
+            <td>${pac.toUpperCase()}</td>
+            <td>M01</td>
+            <td>120/80 MMHG</td>
+            <td>${sintomas.toUpperCase()}</td>
+            <td>${diag.toUpperCase()}</td>
+            <td>${trat.toUpperCase()}</td>
+            <td>REGISTRO MANUAL</td>
+            <td>${fechaFormatoCorto}</td>
+            <td>75 LPM</td>
+            <td>-</td>
+            <td>-</td>
+        `;
+        tbody.appendChild(tr);
+        document.getElementById('form-historial').reset();
+        mostrarTablaAuto('tabla-historial');
+    }
+
+    function añadirFarmacia() {
+        const id = document.getElementById('f-id').value.trim();
+        const comercial = document.getElementById('f-comercial').value.trim();
+        const generico = document.getElementById('f-generico').value.trim();
+        const stock = document.getElementById('f-stock').value.trim();
+        const caducidad = document.getElementById('f-caducidad').value;
+
+        if (!id || !comercial || !generico || !stock || !caducidad) {
+            alert("Por favor, llene todos los campos del Medicamento.");
+            return;
+        }
+
+        const tbody = document.getElementById('tbody-farmacia');
+        const tr = document.createElement('tr');
+        const loteAleatorio = "LMT" + Math.floor(10000 + Math.random() * 90000);
+
+        tr.innerHTML = `
+            <td>${id.toUpperCase()}</td>
+            <td>${comercial.toUpperCase()}</td>
+            <td>${generico.toUpperCase()}</td>
+            <td>${loteAleatorio}</td>
+            <td>${stock}</td>
+            <td>20</td>
+            <td>${formatearFecha(caducidad)}</td>
+        `;
+        tbody.appendChild(tr);
+        document.getElementById('form-farmacia').reset();
+        mostrarTablaAuto('tabla-farmacia');
+    }
+
+    function agendarCita() {
+        const id = document.getElementById('c-id').value.trim();
+        const pac = document.getElementById('c-pac').value.trim();
+        const med = document.getElementById('c-med').value.trim();
+        const motivo = document.getElementById('c-motivo').value.trim();
+        const horario = document.getElementById('c-horario').value.trim();
+
+        if (!id || !pac || !med || !motivo || !horario) {
+            alert("Por favor, llene todos los campos de la Cita.");
+            return;
+        }
+
+        const tbody = document.getElementById('tbody-citas');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${id.toUpperCase()}</td>
+            <td>${pac.toUpperCase()}</td>
+            <td>${med.toUpperCase()}</td>
+            <td>${motivo.toUpperCase()}</td>
+            <td>${horario.toUpperCase()}</td>
+            <td>PROGRAMADA</td>
+            <td>555-1000</td>
+            <td>CONS-GRAL</td>
+            <td>-</td>
+            <td>$0</td>
+        `;
+        tbody.appendChild(tr);
+        document.getElementById('form-citas').reset();
+        mostrarTablaAuto('tabla-citas');
+    }
+
+    function actualizarCama() {
+        const id = document.getElementById('cam-id').value.trim().toUpperCase();
+        const estado = document.getElementById('cam-estado').value;
+        const pac = document.getElementById('cam-pac').value.trim() || '-';
+
+        if (!id) {
+            alert("Por favor, ingrese el ID de la habitación.");
+            return;
+        }
+
+        const tbody = document.getElementById('tbody-camas');
+        let filaExistente = null;
+        const filas = tbody.getElementsByTagName('tr');
+
+        for (let i = 0; i < filas.length; i++) {
+            const celdaId = filas[i].getElementsByTagName('td')[0];
+            if (celdaId && celdaId.textContent.trim().toUpperCase() === id) {
+                filaExistente = filas[i];
+                break;
+            }
+        }
+
+        let badgeClass = 'badge-disponible';
+        if (estado === 'OCUPADA') badgeClass = 'badge-ocupada';
+        else if (estado === 'LIMPIEZA') badgeClass = 'badge-limpieza';
+        else if (estado === 'MANTENIMIENTO') badgeClass = 'badge-mantenimiento';
+
+        const badgeHtml = `<span class="badge ${badgeClass}">${estado}</span>`;
+
+        if (filaExistente) {
+            const celdas = filaExistente.getElementsByTagName('td');
+            celdas[2].innerHTML = badgeHtml;
+            celdas[4].textContent = pac.toUpperCase();
+        } else {
+            const tr = document.createElement('tr');
+            const numMatch = id.match(/\d+/);
+            let piso = "1";
+            if (numMatch && numMatch[0].length >= 3) {
+                piso = numMatch[0].charAt(numMatch[0].length - 3);
+            } else if (numMatch) {
+                piso = numMatch[0].charAt(0);
+            }
+
+            tr.innerHTML = `
+                <td>${id}</td>
+                <td>${piso}</td>
+                <td>${badgeHtml}</td>
+                <td>GENERAL</td>
+                <td>${pac.toUpperCase()}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        document.getElementById('form-camas').reset();
+        mostrarTablaAuto('tabla-camas');
+    }
+</script>
+
+</body>
+</html>
